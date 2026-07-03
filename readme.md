@@ -1,6 +1,6 @@
 # spxmod
 
-Toy model of SP500 index.
+Toy classification model of SP500 index daily returns.
 
 
 ### Dependencies
