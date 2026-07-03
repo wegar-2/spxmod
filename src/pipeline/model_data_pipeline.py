@@ -36,7 +36,7 @@ class ModelDataPipeline:
         # data = TrendFeaturesTransformer().transform(data)
         # data = VolatilityFeaturesTransformer().transform(data)
         # data = MeanReversionFeaturesTransformer().transform(data)
-        # data = VolumeFeaturesTransformer().transform(data)
+        data = VolumeFeaturesTransformer().transform(data)
         data = CalendarFeaturesTransformer().transform(data)
 
         logger.info("Keeping only rows without NAs")

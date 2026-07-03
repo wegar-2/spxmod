@@ -30,8 +30,26 @@ class CalendarFeaturesTransformer:
         data["is_monday"] = (data["day_of_week"] == 0).astype(int)
         data["is_friday"] = (data["day_of_week"] == 4).astype(int)
 
+        logger.info("Add first and last trading day in month flag")
 
-        data["is_month_start"] = data.index.is_month_start.astype(int)
-        data["is_month_end"] = data.index.is_month_end.astype(int)
+        dt = data.reset_index(drop=False)[["date"]].copy(deep=True)
+        dt.index = dt["date"]
+        dt = dt.groupby(pd.Grouper(freq="ME"))[["date"]].min()
+        dt.index = dt["date"]
+        dt["date"] = 1
+        dt = dt.rename(columns={"date": "is_month_start"})
+        data = pd.merge(data, dt, left_index=True, right_index=True, how="left")
+        data["is_month_start"] = data["is_month_start"].fillna(0)
+        data["is_month_start"] = data["is_month_start"].astype(int)
+
+        dt = data.reset_index(drop=False)[["date"]].copy(deep=True)
+        dt.index = dt["date"]
+        dt = dt.groupby(pd.Grouper(freq="ME"))[["date"]].max()
+        dt.index = dt["date"]
+        dt["date"] = 1
+        dt = dt.rename(columns={"date": "is_month_end"})
+        data = pd.merge(data, dt, left_index=True, right_index=True, how="left")
+        data["is_month_end"] = data["is_month_end"].fillna(0)
+        data["is_month_end"] = data["is_month_end"].astype(int)
 
         return data

@@ -6,4 +6,6 @@ __all__ = ["VolumeFeaturesTransformer"]
 class VolumeFeaturesTransformer:
 
     def transform(self, data: pd.DataFrame) -> pd.DataFrame:
-        pass
+
+
+        return data
