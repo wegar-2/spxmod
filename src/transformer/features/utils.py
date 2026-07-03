@@ -1,6 +1,5 @@
 from typing import Optional
 
-import numpy as np
 import pandas as pd
 
 __all__ = [
@@ -35,12 +34,14 @@ def ewm_zscore(
     return (data - mu) / sigma
 
 
-def atr(
-        h: pd.Series,
-        l: pd.Series,
-        c: pd.Series,
-        hl: int
-) -> pd.Series:
+def atr(data: pd.DataFrame, hl: int) -> pd.Series:
+
+    if min_periods is None:
+        pass
+
+    h = data["high"]
+    l = data["low"]
+    c = data["close"]
 
     prev_close = c.shift(1)
 

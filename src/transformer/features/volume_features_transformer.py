@@ -1,5 +1,7 @@
 import pandas as pd
 
+__all__ = ["VolumeFeaturesTransformer"]
+
 
 class VolumeFeaturesTransformer:
 
