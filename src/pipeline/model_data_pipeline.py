@@ -1,3 +1,6 @@
+import logging
+from pathlib import Path
+
 from moddata import load_data
 import pandas as pd
 
@@ -14,20 +17,30 @@ from src.transformer.features.volume_features_transformer import (
 from src.transformer.features.calendar_features_transformer import (
     CalendarFeaturesTransformer)
 
+logger = logging.getLogger(__name__)
+
+__all__ = ["ModelDataPipeline"]
+
 
 class ModelDataPipeline:
 
-    def run(self) -> pd.DataFrame:
+    def __init__(self):
+        self._data_path: Path = Path(__file__).parent.parent.parent / "data" / "model_data.parquet"
+
+    def run(self) -> None:
 
         data = load_data("spx_1901-2025")
         data = data["2000-01-01":]
 
         data = ReturnFeaturesTransformer().transform(data)
-        data = TrendFeaturesTransformer().transform(data)
-        data = VolatilityFeaturesTransformer().transform(data)
-        data = MeanReversionFeaturesTransformer().transform(data)
-        data = VolumeFeaturesTransformer().transform(data)
+        # data = TrendFeaturesTransformer().transform(data)
+        # data = VolatilityFeaturesTransformer().transform(data)
+        # data = MeanReversionFeaturesTransformer().transform(data)
+        # data = VolumeFeaturesTransformer().transform(data)
         data = CalendarFeaturesTransformer().transform(data)
 
+        logger.info("Keeping only rows without NAs")
         data = data.loc[~data.isna().any(axis=1), :]
-        return data
+
+        logger.info("Saving model dataset to file")
+        data.to_parquet(self._data_path, engine="pyarrow")
