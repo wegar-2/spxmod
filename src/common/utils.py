@@ -54,7 +54,7 @@ def tr(data: pd.DataFrame) -> pd.Series:
 
 
 def ewm_atr(
-        data: pd.Series[],
+        data: pd.Series,
         hl: int,
         min_periods: Optional[int] = None
 ) -> pd.Series:
