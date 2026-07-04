@@ -9,17 +9,11 @@ __all__ = ["CalendarFeaturesTransformer"]
 
 class CalendarFeaturesTransformer:
 
-    def _add_month_first_day(self):
-        pass
-
-    def _add_month_last_day(self):
-        pass
-
     def transform(self, data: pd.DataFrame) -> pd.DataFrame:
 
-        logger.info("Adding CALENDAR-BASED features")
+        logger.info("------- CALENDAR features -------")
 
-        logger.info("Adding day-of-week")
+        logger.info("CALENDAR 1/2. Adding day-of-week, months, quaretrs, etc")
         data["day_of_week"] = data.index.weekday
 
         logger.info("Adding month & quarter")
@@ -30,7 +24,7 @@ class CalendarFeaturesTransformer:
         data["is_monday"] = (data["day_of_week"] == 0).astype(int)
         data["is_friday"] = (data["day_of_week"] == 4).astype(int)
 
-        logger.info("Add first and last trading day in month flag")
+        logger.info("CALENDAR 2/2. first and last trading day in month flag")
 
         dt = data.reset_index(drop=False)[["date"]].copy(deep=True)
         dt.index = dt["date"]

@@ -4,7 +4,7 @@ from typing import Final
 
 import pandas as pd
 
-from src.transformer.features.utils import ewm_zscore
+from src.common.utils import ewm_zscore
 from src.common.aliases import IntTuple
 
 logger = logging.getLogger(__name__)
@@ -27,28 +27,28 @@ class TrendFeaturesTransformer:
 
     def transform(self, data: pd.DataFrame) -> pd.DataFrame:
 
-        logger.info("Adding TREND features")
+        logger.info("------- TREND features -------")
 
-        logger.info("Calculating MAs and MAs-based features")
-        for win in self._ma_windows:
+        logger.info("TREND 1/3. Calculating MAs and MAs-based features")
+        for w in self._ma_windows:
 
-            logger.info(f"MA of close {win} days")
-            data[f"close_ma_{win}D"] = (
-                data["close"].rolling(window=win).mean())
+            logger.info(f"MA of close {w} days")
+            data[f"close_ma_{w}D"] = (
+                data["close"].rolling(window=w).mean())
 
             logger.info("Ratio of the MA to close")
-            data[f"ratio_close_to_ma_{win}D"] = (
-                data["close"] / data[f"close_ma_{win}D"])
+            data[f"ratio_close_to_ma_{w}D"] = (
+                data["close"] / data[f"close_ma_{w}D"])
 
             for hl in self._zscore_half_lives:
                 logger.info(f"EWM Z-scores of the MA using half-life {hl}")
-                data[f"close_ma_{win}D_zscore_hl_{hl}D"] = ewm_zscore(
-                    data=data[f"close_ma_{win}D"],
+                data[f"close_ma_{w}D_zscore_hl_{hl}D"] = ewm_zscore(
+                    data=data[f"close_ma_{w}D"],
                     hl=hl,
                     min_periods=max(5, hl // 2)
                 )
 
-        logging.info("Calculating MA slopes")
+        logging.info("TREND 2/3. MA slopes")
         for ma_wind, ma_slope_lag in product(
                 self._ma_windows,
                 self._ma_slope_lags
@@ -59,7 +59,7 @@ class TrendFeaturesTransformer:
                 data[f"close_ma_{ma_wind}D"].shift(ma_slope_lag)
             ) - 1
 
-        logger.info("Classic crossovers between MAs and/or close price")
+        logger.info("TREND 3/3. Classic crossovers between MAs and/or close price")
         data["MA20_gt_MA50"] = (
             data["close"].rolling(window=20).mean() >
             data["close"].rolling(window=50).mean()

@@ -22,9 +22,9 @@ class VolatilityFeaturesTransformer:
 
     def transform(self, data: pd.DataFrame) -> pd.DataFrame:
 
-        logger.info("Adding VOLATILITY features")
+        logger.info("------- VOLATILITY features -------")
 
-        logger.info("Realized volatility")
+        logger.info("VOLATILITY 1/3. Realized volatility")
         for rv_hl in self._realized_vol_windows:
 
             logger.info(f"Realized vol over half life {rv_hl}")
@@ -35,6 +35,10 @@ class VolatilityFeaturesTransformer:
                 logger.info(f"zscoring realized ewm vol hl {rv_hl} using hl {hl}")
                 data[f"ewm_realized_vol_hl{hl}"] = ewm_zscore(
                     data=data[f"ewm_realized_vol_hl{rv_hl}"], hl=hl)
+
+        logger.info("VOLATILITY 2/3. Average true range")
+
+        logger.info("VOLATILITY 3/3. Daily range")
 
 
 

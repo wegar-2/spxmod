@@ -2,7 +2,6 @@ import logging
 from pathlib import Path
 
 from moddata import load_data
-import pandas as pd
 
 from src.transformer.features.return_features_transformer import (
     ReturnFeaturesTransformer)
@@ -47,13 +46,6 @@ class ModelDataPipeline:
 
         for transformer in self._transformers:
             data = transformer.transform(data)
-
-        # data = ReturnFeaturesTransformer().transform(data)
-        # data = TrendFeaturesTransformer().transform(data)
-        # data = VolatilityFeaturesTransformer().transform(data)
-        # # data = MeanReversionFeaturesTransformer().transform(data)
-        # # data = VolumeFeaturesTransformer().transform(data)
-        # data = CalendarFeaturesTransformer().transform(data)
 
         logger.info("Keeping only rows without NAs")
         data = data.loc[~data.isna().any(axis=1), :]

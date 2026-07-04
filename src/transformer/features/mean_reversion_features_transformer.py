@@ -11,6 +11,6 @@ class MeanReversionFeaturesTransformer:
 
     def transform(self, data: pd.DataFrame) -> pd.DataFrame:
 
-        logger.info("Adding MEAN REVERSION features")
+        logger.info("------- MEAN REVERSION features -------")
 
         return data
