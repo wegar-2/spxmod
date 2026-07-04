@@ -52,7 +52,7 @@ class VolumeFeaturesTransformer:
         logger.info("VOLUME 2/2. On-balance volume (OBV)")
 
         logger.info("On-balance volume (OBV)")
-        signed_volume = np.sign(data["log_return"]) * data["volume"]
+        signed_volume = np.sign(data["log_ret"]) * data["volume"]
         data["obv"] = signed_volume.cumsum()
 
         logger.info("Change of on-balance volume")

@@ -54,7 +54,7 @@ def tr(data: pd.DataFrame) -> pd.Series:
 
 
 def ewm_atr(
-        data: pd.Series,
+        data: pd.DataFrame,
         hl: int,
         min_periods: Optional[int] = None
 ) -> pd.Series:
@@ -75,8 +75,10 @@ def ewm_rsi(
 
     min_periods = max(5, hl // 2)
 
+    delta_close = close.diff()
+
     ups = (
-        close
+        delta_close
         .clip(lower=0)
         .ewm(
             halflife=hl,
@@ -85,9 +87,7 @@ def ewm_rsi(
         ).mean()
     )
     downs = (
-        (-close)
-        .clip(down=0)
-        .ewm(
+        -delta_close.clip(upper=0).ewm(
             halflife=hl,
             min_periods=min_periods,
             adjust=False

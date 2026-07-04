@@ -43,7 +43,7 @@ class VolatilityFeaturesTransformer:
         logger.info("VOLATILITY 2/3. Average true range")
         for atr_hl in self._atr_half_lives:
             logger.info(f"Calculating ATR hl{atr_hl}")
-            data[f"atr_hl{atr_hl}"] = ewm_atr(data=data["close"], hl=atr_hl)
+            data[f"atr_hl{atr_hl}"] = ewm_atr(data=data, hl=atr_hl)
             data[f"atr_hl{atr_hl}_pctg"] = (
                     data[f"atr_hl{atr_hl}"] / data["close"])
             for hl in self._zscore_hal_lives:
