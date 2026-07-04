@@ -1,16 +1,16 @@
 from itertools import product
 import logging
-from typing import Final, TypeAlias
+from typing import Final
 
 import pandas as pd
 
 from src.transformer.features.utils import ewm_zscore
+from src.common.aliases import IntTuple
 
 logger = logging.getLogger(__name__)
 
 __all__ = ["TrendFeaturesTransformer"]
 
-IntTuple: TypeAlias = tuple[int, ...]
 
 
 class TrendFeaturesTransformer:

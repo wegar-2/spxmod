@@ -25,7 +25,11 @@ __all__ = ["ModelDataPipeline"]
 class ModelDataPipeline:
 
     def __init__(self):
-        self._data_path: Path = Path(__file__).parent.parent.parent / "data" / "model_data.parquet"
+        self._data_path: Path = (
+                Path(__file__).parent.parent.parent /
+                "data" /
+                "model_data.parquet"
+        )
 
     def run(self) -> None:
 
@@ -34,7 +38,7 @@ class ModelDataPipeline:
 
         data = ReturnFeaturesTransformer().transform(data)
         data = TrendFeaturesTransformer().transform(data)
-        # data = VolatilityFeaturesTransformer().transform(data)
+        data = VolatilityFeaturesTransformer().transform(data)
         # data = MeanReversionFeaturesTransformer().transform(data)
         # data = VolumeFeaturesTransformer().transform(data)
         data = CalendarFeaturesTransformer().transform(data)

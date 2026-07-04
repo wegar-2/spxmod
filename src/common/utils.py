@@ -1,10 +1,14 @@
 from typing import Optional
 
+import numpy as np
 import pandas as pd
 
 __all__ = [
+    "ewm_atr",
+    "ewm_vol",
     "ewm_zscore",
-    "rolling_zscore"
+    "rolling_zscore",
+    "tr",
 ]
 
 
@@ -28,31 +32,47 @@ def ewm_zscore(
         min_periods: Optional[int] = None
 ):
     if min_periods is None:
-        min_periods = hl
+        min_periods = max(5, hl // 2)
     mu = data.ewm(halflife=hl, min_periods=min_periods, adjust=False).mean()
     sigma = data.ewm(halflife=hl, min_periods=min_periods, adjust=False).std()
     return (data - mu) / sigma
 
 
-def atr(data: pd.DataFrame, hl: int) -> pd.Series:
-
-    if min_periods is None:
-        pass
+def tr(data: pd.DataFrame) -> pd.Series:
 
     h = data["high"]
     l = data["low"]
     c = data["close"]
-
     prev_close = c.shift(1)
 
-    tr = pd.concat([
+    return pd.concat([
         (h - prev_close).abs(),
         (l - prev_close).abs(),
         (h - l).abs()
     ], axis=1).max(axis=1)
 
-    return tr.ewm(halflife=hl).mean()
+
+def ewm_atr(data: pd.DataFrame) -> pd.Series:
+    pass
 
 
 def rsi():
     pass
+
+
+def ewm_vol(
+        data: pd.Series,
+        hl: int,
+        annualize: bool = True
+):
+
+    out = data.ewm(
+        halflife=hl,
+        adjust=False,
+        min_periods=max(5, hl // 2)
+    ).std(bias=False)
+
+    if annualize:
+        out = out * np.sqrt(252)
+
+    return out
