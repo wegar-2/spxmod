@@ -73,9 +73,18 @@ def rsi():
 
 def bb(
         data: pd.Series,
-        window: int
+        window: int = 20,
+        k: int = 2
 ) -> pd.DataFrame:
-    pass
+
+    std_ = data.rolling(window=window, min_periods=window).std()
+    middle = data.rolling(window=window, min_periods=window).mean()
+
+    return pd.DataFrame(data={
+        f"bb_{window}d_mid": middle,
+        f"bb_{window}d_lower_{k}stds": middle - k * std_,
+        f"bb_{window}d_upper_{k}stds": middle + k * std_,
+    }, index=data.index)
 
 
 def ewm_vol(
