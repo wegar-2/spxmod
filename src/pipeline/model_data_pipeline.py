@@ -31,17 +31,29 @@ class ModelDataPipeline:
                 "model_data.parquet"
         )
 
+        self._transformers = [
+            ReturnFeaturesTransformer(),
+            TrendFeaturesTransformer(),
+            VolatilityFeaturesTransformer(),
+            MeanReversionFeaturesTransformer(),
+            VolumeFeaturesTransformer(),
+            CalendarFeaturesTransformer()
+        ]
+
     def run(self) -> None:
 
         data = load_data("spx_1901-2025")
         data = data["2000-01-01":]
 
-        data = ReturnFeaturesTransformer().transform(data)
-        data = TrendFeaturesTransformer().transform(data)
-        data = VolatilityFeaturesTransformer().transform(data)
-        # data = MeanReversionFeaturesTransformer().transform(data)
-        # data = VolumeFeaturesTransformer().transform(data)
-        data = CalendarFeaturesTransformer().transform(data)
+        for transformer in self._transformers:
+            data = transformer.transform(data)
+
+        # data = ReturnFeaturesTransformer().transform(data)
+        # data = TrendFeaturesTransformer().transform(data)
+        # data = VolatilityFeaturesTransformer().transform(data)
+        # # data = MeanReversionFeaturesTransformer().transform(data)
+        # # data = VolumeFeaturesTransformer().transform(data)
+        # data = CalendarFeaturesTransformer().transform(data)
 
         logger.info("Keeping only rows without NAs")
         data = data.loc[~data.isna().any(axis=1), :]

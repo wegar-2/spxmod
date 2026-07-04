@@ -4,7 +4,7 @@ from itertools import product
 import numpy as np
 import pandas as pd
 
-from src.transformer.features.utils import ewm_zscore
+from src.common.utils import ewm_zscore
 
 logger = logging.getLogger(__name__)
 
