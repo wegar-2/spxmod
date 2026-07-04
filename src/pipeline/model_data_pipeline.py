@@ -33,10 +33,10 @@ class ModelDataPipeline:
         data = data["2000-01-01":]
 
         data = ReturnFeaturesTransformer().transform(data)
-        # data = TrendFeaturesTransformer().transform(data)
+        data = TrendFeaturesTransformer().transform(data)
         # data = VolatilityFeaturesTransformer().transform(data)
         # data = MeanReversionFeaturesTransformer().transform(data)
-        data = VolumeFeaturesTransformer().transform(data)
+        # data = VolumeFeaturesTransformer().transform(data)
         data = CalendarFeaturesTransformer().transform(data)
 
         logger.info("Keeping only rows without NAs")

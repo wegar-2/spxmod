@@ -17,7 +17,7 @@ class CalendarFeaturesTransformer:
 
     def transform(self, data: pd.DataFrame) -> pd.DataFrame:
 
-        logger.info("Adding calendar-based features")
+        logger.info("Adding CALENDAR-BASED features")
 
         logger.info("Adding day-of-week")
         data["day_of_week"] = data.index.weekday

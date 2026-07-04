@@ -23,7 +23,7 @@ class ReturnFeaturesTransformer:
 
     def transform(self, data: pd.DataFrame) -> pd.DataFrame:
 
-        logger.info("Adding return features")
+        logger.info("Adding RETURN features")
 
         logger.info("1. Calculating daily return")
         data["log_ret"] = np.log(data["close"] / data["open"])
