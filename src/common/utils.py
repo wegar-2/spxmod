@@ -5,6 +5,7 @@ import pandas as pd
 
 __all__ = [
     "ewm_atr",
+    "ewm_rsi",
     "ewm_vol",
     "ewm_zscore",
     "rolling_zscore",
@@ -53,7 +54,7 @@ def tr(data: pd.DataFrame) -> pd.Series:
 
 
 def ewm_atr(
-        data: pd.DataFrame,
+        data: pd.Series[],
         hl: int,
         min_periods: Optional[int] = None
 ) -> pd.Series:
@@ -67,24 +68,51 @@ def ewm_atr(
     return atr
 
 
-def rsi():
-    pass
+def ewm_rsi(
+        close: pd.Series,
+        hl: int
+) -> pd.Series:
+
+    min_periods = max(5, hl // 2)
+
+    ups = (
+        close
+        .clip(lower=0)
+        .ewm(
+            halflife=hl,
+            min_periods=min_periods,
+            adjust=False
+        ).mean()
+    )
+    downs = (
+        (-close)
+        .clip(down=0)
+        .ewm(
+            halflife=hl,
+            min_periods=min_periods,
+            adjust=False
+        ).mean()
+    )
+
+    rs = ups / downs
+
+    return 100 - (100 / (1 + rs))
 
 
 def bb(
-        data: pd.Series,
+        close: pd.Series,
         window: int = 20,
         k: int = 2
 ) -> pd.DataFrame:
 
-    std_ = data.rolling(window=window, min_periods=window).std()
-    middle = data.rolling(window=window, min_periods=window).mean()
+    std_ = close.rolling(window=window, min_periods=window).std()
+    middle = close.rolling(window=window, min_periods=window).mean()
 
     return pd.DataFrame(data={
         f"bb_{window}d_mid": middle,
         f"bb_{window}d_lower_{k}stds": middle - k * std_,
         f"bb_{window}d_upper_{k}stds": middle + k * std_,
-    }, index=data.index)
+    }, index=close.index)
 
 
 def ewm_vol(
