@@ -52,11 +52,29 @@ def tr(data: pd.DataFrame) -> pd.Series:
     ], axis=1).max(axis=1)
 
 
-def ewm_atr(data: pd.DataFrame) -> pd.Series:
-    pass
+def ewm_atr(
+        data: pd.DataFrame,
+        hl: int,
+        min_periods: Optional[int] = None
+) -> pd.Series:
+
+    if min_periods is None:
+        min_periods = max(5, hl // 2)
+
+    tr_: pd.Series = tr(data)
+    atr = tr_.ewm(halflife=hl, adjust=False, min_periods=min_periods).mean()
+
+    return atr
 
 
 def rsi():
+    pass
+
+
+def bb(
+        data: pd.Series,
+        window: int
+) -> pd.DataFrame:
     pass
 
 
