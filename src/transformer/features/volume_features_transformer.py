@@ -13,4 +13,8 @@ class VolumeFeaturesTransformer:
 
         logger.info("------- VOLUME features -------")
 
+        logger.info("VOLUME 1/2. Volume stats")
+
+        logger.info("VOLUME 2/2. On-balance volume")
+
         return data
