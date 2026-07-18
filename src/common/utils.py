@@ -1,9 +1,14 @@
+import logging
+from pathlib import Path
 from typing import Optional
 
 import numpy as np
 import pandas as pd
 
+logger = logging.getLogger(__name__)
+
 __all__ = [
+    "ensure_data_directory",
     "ewm_atr",
     "ewm_rsi",
     "ewm_vol",
@@ -131,3 +136,10 @@ def ewm_vol(
         out = out * np.sqrt(252)
 
     return out
+
+
+def ensure_data_directory() -> None:
+    dir = Path(__file__).parent.parent.parent / "data"
+    if not dir.exists():
+        logger.info(f"{dir=} does not exist; creating it")
+        dir.mkdir()
