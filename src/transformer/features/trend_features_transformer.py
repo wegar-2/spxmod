@@ -42,7 +42,7 @@ class TrendFeaturesTransformer:
 
             for hl in self._zscore_half_lives:
                 logger.info(f"EWM Z-scores of the MA using half-life {hl}")
-                data[f"close_ma_{w}D_zscore_hl_{hl}D"] = ewm_zscore(
+                data[f"close_ma_{w}D_zscore_hl{hl}D"] = ewm_zscore(
                     data=data[f"close_ma_{w}D"],
                     hl=hl,
                     min_periods=max(5, hl // 2)

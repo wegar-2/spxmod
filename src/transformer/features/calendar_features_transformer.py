@@ -14,15 +14,18 @@ class CalendarFeaturesTransformer:
         logger.info("------- CALENDAR features -------")
 
         logger.info("CALENDAR 1/2. Adding day-of-week, months, quaretrs, etc")
-        data["day_of_week"] = data.index.weekday
+        new_cols = {}
+        new_cols["day_of_week"] = data.index.weekday
 
         logger.info("Adding month & quarter")
-        data["month"] = data.index.month
-        data["quarter"] = data.index.quarter
+        new_cols["month"] = data.index.month
+        new_cols["quarter"] = data.index.quarter
 
         logger.info("Adding binary variable for Monday and Friday")
-        data["is_monday"] = (data["day_of_week"] == 0).astype(int)
-        data["is_friday"] = (data["day_of_week"] == 4).astype(int)
+        new_cols["is_monday"] = (new_cols["day_of_week"] == 0).astype(int)
+        new_cols["is_friday"] = (new_cols["day_of_week"] == 4).astype(int)
+
+        data = pd.concat([data, pd.DataFrame(new_cols, index=data.index)], axis=1)
 
         logger.info("CALENDAR 2/2. first and last trading day in month flag")
 

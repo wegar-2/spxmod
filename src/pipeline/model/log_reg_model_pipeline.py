@@ -16,8 +16,15 @@ class LogRegModelPipeline:
     def __init__(self, config: LogRegModelPipelineConfig):
         self._config: LogRegModelPipelineConfig = config
 
+    def _preprocess_data(self, data: pd.DataFrame) -> pd.DataFrame:
+
+        return data
+
     def run(self):
+
         data: pd.DataFrame = ModelDataExtractor().extract()
+        data = self._preprocess_data(data)
+
         x_train = data.loc[
             self._config.train_di[0]:self._config.train_di[1],
             self._config.indep_vars

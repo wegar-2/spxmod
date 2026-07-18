@@ -32,10 +32,11 @@ class VolumeFeaturesTransformer:
         logger.info("Log of volume")
         data["log_volume"] = np.log(data["volume"])
 
+        new_cols = {}
         for hl in self._volume_half_lives:
 
             logger.info(f"Volume above or below EWM hl{hl} of volume")
-            data[f"ratio_volume_to_ewm_hl{hl}"] = (
+            new_cols[f"ratio_volume_to_ewm_hl{hl}"] = (
                 data["volume"] /
                 data["volume"].ewm(
                     halflife=hl,
@@ -45,9 +46,10 @@ class VolumeFeaturesTransformer:
             ) - 1
 
             logger.info(f"LogVolume zscore half life {hl}")
-            data[f"log_volume_zscore_hl{hl}"] = (
+            new_cols[f"log_volume_zscore_hl{hl}"] = (
                 ewm_zscore(data=data["log_volume"], hl=hl))
 
+        data = pd.concat([data, pd.DataFrame(new_cols)], axis=1)
 
         logger.info("VOLUME 2/2. On-balance volume (OBV)")
 
@@ -60,8 +62,10 @@ class VolumeFeaturesTransformer:
             data["obv"] / data["obv"].shift(self._obv_lag)) - 1
 
         logger.info("Calculating zscores of obv changes")
+        new_cols = {}
         for hl in self._obv_change_half_lives:
-            data[f"obv_change_{self._obv_lag}D_zscore_hl{hl}"] = ewm_zscore(
+            new_cols[f"obv_change_{self._obv_lag}D_zscore_hl{hl}"] = ewm_zscore(
                 data=data[f"obv_change_{self._obv_lag}D"], hl=hl)
+        data = pd.concat([data, pd.DataFrame(new_cols)], axis=1)
 
         return data

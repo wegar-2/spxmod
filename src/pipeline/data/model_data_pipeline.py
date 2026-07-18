@@ -25,7 +25,7 @@ class ModelDataPipeline:
 
     def __init__(self):
         self._data_path: Path = (
-                Path(__file__).parent.parent.parent /
+                Path(__file__).parent.parent.parent.parent /
                 "data" /
                 "model_data.parquet"
         )

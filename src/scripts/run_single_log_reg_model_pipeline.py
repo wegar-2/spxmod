@@ -10,7 +10,7 @@ if __name__ == "__main__":
             hyperparams={},
             indep_vars=[],
             dep_var="",
-            train_di=(date(), date()),
-            test_di=(date(), date())
+            train_di=(date(2021, 1, 1), date(2023, 11, 30)),
+            test_di=(date(2024, 1, 1), date(2024, 12, 31))
         )
     ).run()

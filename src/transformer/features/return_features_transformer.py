@@ -37,6 +37,7 @@ class ReturnFeaturesTransformer:
         logger.info("RETURN 3/3. Calculating EWM-zscored returns")
         for rh, hl in product(self._return_horizons, self._half_lives):
             logger.info(f"Smoothing returns over {rh}D using half-life {hl}")
-            data[f"log_ret_{rh}D_"] = ewm_zscore(data[f"log_ret_{rh}D"], hl=hl)
+            data[f"log_ret_{rh}D_ewm_zscore_hl{hl}"] = (
+                ewm_zscore(data[f"log_ret_{rh}D"], hl=hl))
 
         return data
