@@ -9,4 +9,7 @@ __all__ = ["LogRegModelPipelineConfig"]
 
 class LogRegModelPipelineConfig(BaseModel):
     hyperparams: dict[Any, Any]
-    train_test_dis: list[DatesInterval]
+    indep_vars: list[str]
+    dep_var: str
+    train_di: DatesInterval
+    test_di: DatesInterval

@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 from src.common.utils import ensure_data_directory
-from src.pipeline.model_data_pipeline import ModelDataPipeline
+from src.pipeline.data.model_data_pipeline import ModelDataPipeline
 
 logger = logging.getLogger(__name__)
 
