@@ -24,8 +24,9 @@ class CalendarFeaturesTransformer:
         logger.info("Adding binary variable for Monday and Friday")
         new_cols["is_monday"] = (new_cols["day_of_week"] == 0).astype(int)
         new_cols["is_friday"] = (new_cols["day_of_week"] == 4).astype(int)
-
-        data = pd.concat([data, pd.DataFrame(new_cols, index=data.index)], axis=1)
+        data = pd.concat([
+            data, pd.DataFrame(new_cols, index=data.index)], axis=1)
+        data = data.copy(deep=True)
 
         logger.info("CALENDAR 2/2. first and last trading day in month flag")
 

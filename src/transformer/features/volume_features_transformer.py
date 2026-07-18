@@ -50,6 +50,7 @@ class VolumeFeaturesTransformer:
                 ewm_zscore(data=data["log_volume"], hl=hl))
 
         data = pd.concat([data, pd.DataFrame(new_cols)], axis=1)
+        data = data.copy(deep=True)
 
         logger.info("VOLUME 2/2. On-balance volume (OBV)")
 
@@ -67,5 +68,6 @@ class VolumeFeaturesTransformer:
             new_cols[f"obv_change_{self._obv_lag}D_zscore_hl{hl}"] = ewm_zscore(
                 data=data[f"obv_change_{self._obv_lag}D"], hl=hl)
         data = pd.concat([data, pd.DataFrame(new_cols)], axis=1)
+        data = data.copy(deep=True)
 
         return data
