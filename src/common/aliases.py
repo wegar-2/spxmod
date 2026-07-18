@@ -1,7 +1,10 @@
 from datetime import date
 from typing import TypeAlias
 
-__all__ = ["IntTuple"]
+__all__ = [
+    "IntTuple",
+    "DatesInterval"
+]
 
 
 IntTuple: TypeAlias = tuple[int, ...]
